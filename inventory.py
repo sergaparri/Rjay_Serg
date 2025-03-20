@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import json
 
+#factory method
 class Pizza(ABC):
     @abstractmethod
     def __init__(self, name, size, cost, retail, ingredients = []):
@@ -31,7 +32,7 @@ class PepperoniPizza(ABC):
         ingredient = {"flour" : 500, "yeast" : 7, "salt"  : 10, "olive-oil" : .10, "tomato-sauce" : .30, "cheese" : 250, "ham" : 150, "oregano" : .5, "pepper" : 10, }
         return ingredient
 
-class VePizza(ABC):
+class VegetarianPizza(ABC):#need update
     def __init__(self, name, size, cost, retail):
         super().__init__(name, size, cost, retail)
         self.ingredients = self.ingredient()
@@ -71,7 +72,7 @@ class Factory(ABC):
        
        
 class StockFactory(ABC):
-    def create_stock(self, type, name, qty, cost, retail): #unit
+    def create_stock(self, type, name, qty, cost, retail): #fix unit qty should be in grams
         if type == "Ingredient":
             return Ingredient(name, qty, cost, retail)
         elif type == "Beverage":
