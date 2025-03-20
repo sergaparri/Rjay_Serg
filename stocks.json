@@ -1,0 +1,11 @@
+{ 
+    "ingredients" : {
+        "flour" : {"qty" : 1, "cost" : 10}
+    },
+    "beverages" : {
+        "softdrinks" : {"qty" : 1, "cost" : 20, "retail" : 25}
+    },
+    "supplies" : {
+        "box" : {"qty" : 1, "cost" : 2}
+    }
+}
