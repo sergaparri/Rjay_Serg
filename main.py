@@ -17,7 +17,7 @@ class User(Account):
 class Admin(Account):
     def __init__(self, name, password):
         super().__init__(name, password)
-    
+        self.accounts = self.get_accts()  #fix not here
     def create_account(self, type, name, password):
         creator = AccountFactory()
         if type.lower() == 'user':
@@ -26,6 +26,15 @@ class Admin(Account):
             return creator.createAdminAccount(name, password)
         else:
             return 'Please Input Valid Account Type'
+            
+    def get_accts(self): #fix not here
+        with open('accounts.json', 'r') as file:
+            return json.load(file)
+            
+    def update_accts(self): #fix not here should be in main system
+        with open('accounts.json', 'w') as file:
+            json.dump(self.accounts, file)
+        return 'Succesfully Saved'
 
 class Factory(ABC):
     @abstractmethod
