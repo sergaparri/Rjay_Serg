@@ -72,13 +72,13 @@ class Factory(ABC):
        
        
 class StockFactory(ABC):
-    def create_stock(self, type, name, qty, cost, retail): #fix unit qty should be in grams
+    def create_stock(self, type, name, qty, cost, retail=None): #fix unit qty should be in grams
         if type == "Ingredient":
-            return Ingredient(name, qty, cost, retail)
+            return Ingredient(name, qty, cost)
         elif type == "Beverage":
             return Beverage(name, qty, cost, retail) 
         elif type == "Supply":
-            return Supply(name, qty, cost, retail)
+            return Supply(name, qty, cost)
         else:
             return 'Stock Type Not Found'
 
