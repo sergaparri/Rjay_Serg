@@ -1,11 +1,1 @@
-{ 
-    "ingredient" : {
-        "flour" : {"qty" : 1, "cost" : 10}
-    },
-    "beverage" : {
-        "softdrinks" : {"qty" : 1, "cost" : 20, "retail" : 25}
-    },
-    "supply" : {
-        "box" : {"qty" : 1, "cost" : 2}
-    }
-}
+{"ingredient": {"flour": {"qty": 1, "cost": 10}}, "beverage": {"softdrinks": {"qty": 1, "cost": 20, "retail": 25}, "coca-cola": {"qty": 20, "cost": 15, "retail": 0, "type": "Beverage"}}, "supply": {"box": {"qty": 1, "cost": 2}}}
