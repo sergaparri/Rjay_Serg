@@ -1,57 +1,17 @@
 from abc import ABC, abstractmethod
 import json
-
-#factory method
-class Pizza(ABC):
-    @abstractmethod
-    def __init__(self, name, size, cost, retail, ingredients = []):
-        self.name = name
-        self.size = size
-        self.cost = cost + (10 * (size - 1))
-        self.retail = retail + (10 * (size  - 1))
-        self.ingredients = ingredients
-    
-    def set_retail(self):
-        return self.retail 
-    
-class HamAndCheesePizza(ABC):
-    def __init__(self, name, size, cost, retail):
-        super().__init__(name, size, cost, retail)
-        self.ingredients = self.ingredient()
-
-    def ingredient(self):
-        ingredient = {"flour" : 500, "yeast" : 7, "salt"  : 10, "olive-oil" : .10, "tomato-sauce" : .30, "cheese" : 250, "ham" : 150}
-        return ingredient
-
-class PepperoniPizza(ABC):
-    def __init__(self, name, size, cost, retail):
-        super().__init__(name, size, cost, retail)
-        self.ingredients = self.ingredient()
-
-    def ingredient(self):
-        ingredient = {"flour" : 500, "yeast" : 7, "salt"  : 10, "olive-oil" : .10, "tomato-sauce" : .30, "cheese" : 250, "ham" : 150, "oregano" : .5, "pepper" : 10, }
-        return ingredient
-
-class VegetarianPizza(ABC):#need update
-    def __init__(self, name, size, cost, retail):
-        super().__init__(name, size, cost, retail)
-        self.ingredients = self.ingredient()
-
-    def ingredient(self):
-        ingredient = {"flour" : 500, "yeast" : 7, "salt"  : 10, "olive-oil" : .10, "tomato-sauce" : .30, "cheese" : 250, "ham" : 150}
-        return ingredient
               
-class Stock:
+class Stock(ABC):
     @abstractmethod
-    def __init__(self, name, qty, cost, retail,unit):
+    def __init__(self, name, qty, cost, retail):
         self.name = name
         self.qty = qty
         self.cost = cost
         self.retail = retail
 
 class Ingredient(Stock):
-    def __init__(self, name, qty, cost):
-        super().__init__(name, qty, cost)
+    def __init__(self, name, qty, cost,retail):
+        super().__init__(name, qty, cost, retail)
         self.type = 'Ingredient'   
 
 class Beverage(Stock):
@@ -60,8 +20,8 @@ class Beverage(Stock):
         self.type = 'Beverage'
                    
 class Supply(Stock):
-    def __init__(self, name, qty, cost):
-        super().__init__(name, qty, cost)
+    def __init__(self, name, qty, cost, retail):
+        super().__init__(name, qty, cost, retail)
         self.type = 'Supply'
          
 
@@ -70,23 +30,27 @@ class Factory(ABC):
     def create_stock(self, type, name, qty, cost, retail):
        pass
        
-       
-class StockFactory(ABC):
-    def create_stock(self, type, name, qty, cost, retail=None): #fix unit qty should be in grams
-        if type == "Ingredient":
-            return Ingredient(name, qty, cost)
-        elif type == "Beverage":
+    
+class StockFactory(Factory):
+    def __init__(self):
+        pass
+    
+    def create_stock(self, type, name, qty, cost, retail=0):
+        if type.lower() == "ingredient":
+            return Ingredient(name, qty, cost, retail)
+        elif type.lower() == "beverage":
             return Beverage(name, qty, cost, retail) 
-        elif type == "Supply":
-            return Supply(name, qty, cost)
+        elif type.lower() == "supply":
+            return Supply(name, qty, cost, retail)
         else:
             return 'Stock Type Not Found'
 
 class Inventory:
     def __init__(self):
-        self.stocks = self.stocks()     
+        self.stocks = self.load_stocks()
+        self.stock_creator = StockFactory()
         
-    def stocks(self):
+    def load_stocks(self):
         with open('stocks.json', 'r') as file:
             return json.load(file)
     
@@ -98,11 +62,35 @@ class Inventory:
     def show_inventory(self):
         return self.stocks
 
-    def add_stocks(self,stock):
-        self.stocks[stock.type][stock.name]['qty'] = stock.qty
-        self.stocks[stock.type][stock.name]['qty'] = stock.cost
-        if self.stocks.retail:
-            self.stocks[stock.type][stock.name]['retail'] = stock.retail
-        return self.update_inventory()
+    def stock_unit_validator(self, unit, qty):
+        if unit == 'g' or unit == 'grams':
+            return qty
+        elif unit == 'kg' or unit == 'kilograms':
+            return qty * 1000
+        else:
+            return 'Please Input valid Unit'
+        
+    def add_stocks(self,type, name, qty, cost, unit, retail=0):
+        new_qty = self.stock_unit_validator(unit, qty)
+        if isinstance(qty, str): #check unit
+            return qty
+        new_stock = self.stock_creator.create_stock(type, name, qty, cost, retail)
+        if isinstance(new_stock, str): #check type
+            return new_stock
+        data = vars(new_stock).copy()
+        del data["name"]
+        self.stocks[type][name] = data
+        self.update_inventory()
+        return f'{name} added succesfully'
         
 
+if __name__ == "__main__":
+    inv = Inventory()
+    print(inv.show_inventory())
+    
+    print(inv.add_stocks('beverage', 'coca-cola', 20, 15, 25))
+    
+    print(inv.show_inventory())
+    
+    
+    
