@@ -1,22 +1,53 @@
-******************************************************************************
-
-                            Online Java Compiler.
-                Code, Compile, Run and Debug java program online.
-Write your code in this editor and press "Run" button to execute it.
-
-*******************************************************************************/
+/******************************************************************************
+ *
+ *                          Online Java Compiler.
+ *              Code, Compile, Run and Debug java program online.
+ *    Write your code in this editor and press "Run" button to execute it.
+ *
+ *******************************************************************************/
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Main  
 {
-	public static void main(String[] args) {
-		System.out.println("Hello World");
-	}
+    public static void main(String[] args) {
+        System.out.println("Welcome to the Restaurant System!");
+        
+        Customer customer = new Customer("Juan Dela Cruz");
+        System.out.println("Customer: " + customer.getName());
+
+        FastFood burger = new FastFood(120.0, 60.0, "Jollibee", "Yumburger", LocalDate.now().plusDays(5));
+        burger.addIngredient("Beef Patty");
+        burger.addIngredient("Bun");
+        burger.addIngredient("Cheese");
+
+        FreshFood apple = new FreshFood(100.0, 50.0, "Local", "Apple", FoodCategory.FreshFood, true, FreshFoodCategory.Fruits, 100.0, 50.0, 1.5);
+
+        Dessert iceCream = new Dessert(80.0, 40.0, "Selecta", "Ice Cream", "Vanilla", true);
+
+        // Create an order for the customer and add products
+        Order order = new Order(customer);
+        order.addProduct(burger);
+        order.addProduct(apple);
+        order.addProduct(iceCream);
+
+        // Print order details
+        order.printOrderDetails();
+    }
 }
 
-class Restaurant {
+// ============================ Models ============================
 
+class Customer {
+    private String name;
+
+    Customer(String name) {
+        this.name = name;
+    }
+
+    String getName() {
+        return name;
+    }
 }
 
 class Product {
@@ -24,28 +55,26 @@ class Product {
     protected Double priceCost;
     protected String brand;
     protected String name;
-    protected String category;
-    protected int productId
-    
-    Product(Double priceRetail, Double priceCost, String brand, String name, int productId, String category) {
+
+    Product(Double priceRetail, Double priceCost, String brand, String name) {
         this.priceRetail = priceRetail;
         this.priceCost = priceCost;
         this.brand = brand;
         this.name = name;
-        }
-        
+    }
+
     Double getPriceRetail() {
         return priceRetail;
     }
-        
+
     Double getPriceCost() {
         return priceCost;
     }
-    
+
     String getBrand() {
         return brand;
     }
-    
+
     String getName() {
         return name;
     }
@@ -56,92 +85,153 @@ enum FoodCategory {
     FreshFood
 }
 
-class FastFood extends Food{
-    private LocalDate expiryDate;
-    private ArrayList<String> ingredients;
-    
-    FastFood(Double priceRetail, Double priceCost, String brand, String name, LocalDate expiryDate) {
-    super(priceRetail, priceCost, brand, name);
-    this.expiryDate = expiryDate;
-    this.ingredients = new ArrayList<>();
-}
-    void setIngredients(ArrayList ingredient);
-        ingredients.add(ingredient);
-        
-    
-FreshFoodCategory(
+enum FreshFoodCategory {
     Fruits,
     Vegetables
-)
-
-class FreshFood extends Food{
-    private Double priceRetailPerKg;
-    private Double CostPerKg;
-    private Double weightInKg;
-
-    FastFood(String name, FreshFoodCategories category, Double priceRetailPerKg, Double CostPerKg, Double weightInKg) {
-    super(name, category);
-    this.priceRetailPerKg = priceRetailPerKg;
-    this.CostPerKg = CostPerKg;
-    this.weightInKg = weightInKg;
 }
 
-class Food extends Product{
+class Food extends Product {
+    private FoodCategory category;
     private boolean isOrganic;
 
-    Food(Double priceRetail, Double priceCost, String brand, String name,FoodCategory category, boolean isOrganic) {
-        super(priceRetail, priceCost, brand, name, category);
+    Food(Double priceRetail, Double priceCost, String brand, String name, FoodCategory category, boolean isOrganic) {
+        super(priceRetail, priceCost, brand, name);
+        this.category = category;
         this.isOrganic = isOrganic;
+    }
 
+    FoodCategory getCategory() {
+        return category;
+    }
+
+    boolean isOrganic() {
+        return isOrganic;
+    }
 }
 
-BeveragesCategory {
+class FastFood extends Food {
+    private LocalDate expiryDate;
+    private ArrayList<String> ingredients;
+
+    FastFood(Double priceRetail, Double priceCost, String brand, String name, LocalDate expiryDate) {
+        super(priceRetail, priceCost, brand, name, FoodCategory.FastFood, false);
+        this.expiryDate = expiryDate;
+        this.ingredients = new ArrayList<>();
+    }
+
+    void addIngredient(String ingredient) {
+        ingredients.add(ingredient);
+    }
+
+    ArrayList<String> getIngredients() {
+        return ingredients;
+    }
+}
+
+class FreshFood extends Food {
+    private FreshFoodCategory freshCategory;
+    private Double priceRetailPerKg;
+    private Double costPerKg;
+    private Double weightInKg;
+
+    FreshFood(Double priceRetail, Double priceCost, String brand, String name, FoodCategory category, boolean isOrganic,
+              FreshFoodCategory freshCategory, Double priceRetailPerKg, Double costPerKg, Double weightInKg) {
+        super(priceRetail, priceCost, brand, name, category, isOrganic);
+        this.freshCategory = freshCategory;
+        this.priceRetailPerKg = priceRetailPerKg;
+        this.costPerKg = costPerKg;
+        this.weightInKg = weightInKg;
+    }
+
+    FreshFoodCategory getFreshCategory() {
+        return freshCategory;
+    }
+
+    Double getWeightInKg() {
+        return weightInKg;
+    }
+}
+
+enum BeveragesCategory {
     Soda,
-    Juice, 
+    Juice,
     Beer
 }
 
-BeveragesSize {
-    Large=3,
-    Medium=2,
-    Small=1
+enum BeveragesSize {
+    Large,
+    Medium,
+    Small
 }
-class Beverages {
+
+class Beverage extends Product {
     private LocalDate expiryDate;
+    private BeveragesCategory category;
     private BeveragesSize size;
-    
-    Food(Double priceRetail, Double priceCost, String brand, String name, LocalDate expiryDate, BeveragesCategory category, BeveragesSize size) {
+
+    Beverage(Double priceRetail, Double priceCost, String brand, String name, LocalDate expiryDate, BeveragesCategory category, BeveragesSize size) {
         super(priceRetail, priceCost, brand, name);
         this.expiryDate = expiryDate;
+        this.category = category;
         this.size = size;
     }
-    
-    BeveragesSize getSize()  {
+
+    BeveragesSize getSize() {
         return size;
     }
+
+    BeveragesCategory getCategory() {
+        return category;
+    }
 }
 
-class Desserts extends Product{
-    public boolean isCold;
-    public String Flavor;
-    
-    Food(Double priceRetail, Double priceCost, String brand, String name,  DessertsCategory category, String Flavor, boolean isCold);
-        super(priceRetail, priceCost, brand, name, category);
-        this.Flavor = Flavor;
+class Dessert extends Product {
+    private boolean isCold;
+    private String flavor;
+
+    Dessert(Double priceRetail, Double priceCost, String brand, String name, String flavor, boolean isCold) {
+        super(priceRetail, priceCost, brand, name);
+        this.flavor = flavor;
         this.isCold = isCold;
     }
+
+    boolean isCold() {
+        return isCold;
+    }
+
+    String getFlavor() {
+        return flavor;
+    }
 }
 
+// New Order class to handle product orders by customers
+class Order {
+    private Customer customer;
+    private ArrayList<Product> products;
 
-
-class Customer {
-    private String name
-    
-    Customer(String name) {
-     this.name = name;
+    Order(Customer customer) {
+        this.customer = customer;
+        this.products = new ArrayList<>();
     }
-    
-    String getName() {
-        return name;
+
+    void addProduct(Product product) {
+        products.add(product);
+    }
+
+    double calculateTotal() {
+        double total = 0;
+        for (Product p : products) {
+            total += p.getPriceRetail();
+        }
+        return total;
+    }
+
+    void printOrderDetails() {
+        System.out.println("\nOrder Details for Customer: " + customer.getName());
+        System.out.println("Products Ordered:");
+        for (Product p : products) {
+            System.out.println("- " + p.getName() + " (₱" + p.getPriceRetail() + ")");
+        }
+        System.out.println("Total Price: ₱" + calculateTotal());
     }
 }
