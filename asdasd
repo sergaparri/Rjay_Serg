@@ -1,0 +1,147 @@
+******************************************************************************
+
+                            Online Java Compiler.
+                Code, Compile, Run and Debug java program online.
+Write your code in this editor and press "Run" button to execute it.
+
+*******************************************************************************/
+import java.time.LocalDate;
+import java.util.ArrayList;
+
+public class Main  
+{
+	public static void main(String[] args) {
+		System.out.println("Hello World");
+	}
+}
+
+class Restaurant {
+
+}
+
+class Product {
+    protected Double priceRetail;
+    protected Double priceCost;
+    protected String brand;
+    protected String name;
+    protected String category;
+    protected int productId
+    
+    Product(Double priceRetail, Double priceCost, String brand, String name, int productId, String category) {
+        this.priceRetail = priceRetail;
+        this.priceCost = priceCost;
+        this.brand = brand;
+        this.name = name;
+        }
+        
+    Double getPriceRetail() {
+        return priceRetail;
+    }
+        
+    Double getPriceCost() {
+        return priceCost;
+    }
+    
+    String getBrand() {
+        return brand;
+    }
+    
+    String getName() {
+        return name;
+    }
+}
+
+enum FoodCategory {
+    FastFood,
+    FreshFood
+}
+
+class FastFood extends Food{
+    private LocalDate expiryDate;
+    private ArrayList<String> ingredients;
+    
+    FastFood(Double priceRetail, Double priceCost, String brand, String name, LocalDate expiryDate) {
+    super(priceRetail, priceCost, brand, name);
+    this.expiryDate = expiryDate;
+    this.ingredients = new ArrayList<>();
+}
+    void setIngredients(ArrayList ingredient);
+        ingredients.add(ingredient);
+        
+    
+FreshFoodCategory(
+    Fruits,
+    Vegetables
+)
+
+class FreshFood extends Food{
+    private Double priceRetailPerKg;
+    private Double CostPerKg;
+    private Double weightInKg;
+
+    FastFood(String name, FreshFoodCategories category, Double priceRetailPerKg, Double CostPerKg, Double weightInKg) {
+    super(name, category);
+    this.priceRetailPerKg = priceRetailPerKg;
+    this.CostPerKg = CostPerKg;
+    this.weightInKg = weightInKg;
+}
+
+class Food extends Product{
+    private boolean isOrganic;
+
+    Food(Double priceRetail, Double priceCost, String brand, String name,FoodCategory category, boolean isOrganic) {
+        super(priceRetail, priceCost, brand, name, category);
+        this.isOrganic = isOrganic;
+
+}
+
+BeveragesCategory {
+    Soda,
+    Juice, 
+    Beer
+}
+
+BeveragesSize {
+    Large=3,
+    Medium=2,
+    Small=1
+}
+class Beverages {
+    private LocalDate expiryDate;
+    private BeveragesSize size;
+    
+    Food(Double priceRetail, Double priceCost, String brand, String name, LocalDate expiryDate, BeveragesCategory category, BeveragesSize size) {
+        super(priceRetail, priceCost, brand, name);
+        this.expiryDate = expiryDate;
+        this.size = size;
+    }
+    
+    BeveragesSize getSize()  {
+        return size;
+    }
+}
+
+class Desserts extends Product{
+    public boolean isCold;
+    public String Flavor;
+    
+    Food(Double priceRetail, Double priceCost, String brand, String name,  DessertsCategory category, String Flavor, boolean isCold);
+        super(priceRetail, priceCost, brand, name, category);
+        this.Flavor = Flavor;
+        this.isCold = isCold;
+    }
+}
+
+
+
+class Customer {
+    private String name
+    
+    Customer(String name) {
+     this.name = name;
+    }
+    
+    String getName() {
+        return name;
+    }
+}
